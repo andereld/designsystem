@@ -68,12 +68,16 @@ module.exports = {
                     content: 'visuell-identitet/ikoner.md',
                 },
                 {
+                    name: 'Illustrasjoner',
+                    content: 'visuell-identitet/illustrasjoner.md',
+                },
+                {
                     name: 'Typografi',
                     content: 'visuell-identitet/typografi.md',
                 },
                 {
-                    name: 'Illustrasjoner',
-                    content: 'visuell-identitet/illustrasjoner.md',
+                    name: 'Spacing',
+                    content: 'visuell-identitet/spacing.md',
                 },
                 {
                     name: 'Animasjoner',
