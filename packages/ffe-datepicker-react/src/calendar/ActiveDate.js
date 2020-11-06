@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { bool, func, number, oneOfType, shape, string } from 'prop-types';
 import classNames from 'classnames';
+import moment from 'moment';
+import i18n from '../i18n/i18n';
 
 export default class ActiveDate extends Component {
     componentDidMount() {
@@ -37,7 +39,14 @@ export default class ActiveDate extends Component {
     }
 
     render() {
-        const { date, headers, onClick } = this.props;
+        const { date, headers, onClick, locale } = this.props;
+
+        const timestamp = moment(date.timestamp);
+        const year = timestamp.format('yyyy');
+        const dayOfMonth = timestamp.format('DD');
+        const monthName = i18n[locale][
+            'MONTH_'.concat(timestamp.format('M'))
+        ].toLowerCase();
 
         return (
             <td
@@ -52,7 +61,12 @@ export default class ActiveDate extends Component {
                 role="gridcell"
                 tabIndex={this.tabIndex()}
             >
-                <span className={this.dateClassName()}>{date.date}</span>
+                <button
+                    aria-label={`${dayOfMonth}. ${monthName} ${year}`}
+                    className={this.dateClassName()}
+                >
+                    {date.date}
+                </button>
             </td>
         );
     }
@@ -69,4 +83,5 @@ ActiveDate.propTypes = {
     headers: string.isRequired,
     onClick: func.isRequired,
     forceFocus: bool.isRequired,
+    locale: string.isRequired,
 };

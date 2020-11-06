@@ -173,6 +173,7 @@ export default class Calendar extends Component {
                 key={date.date}
                 onClick={this.mouseClick}
                 forceFocus={this.forceDateFocus}
+                locale={this.props.language}
             />
         );
     }
