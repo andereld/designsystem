@@ -21,8 +21,6 @@ export default class Calendar extends Component {
             ),
         };
 
-        this.onBlur = props.onBlurHandler;
-
         this.datepickerId = `ffe-calendar-${uuid()}`;
         this.forceDateFocus = props.focusOnOpen;
 
@@ -37,6 +35,11 @@ export default class Calendar extends Component {
         this.renderWeek = this.renderWeek.bind(this);
         this.renderDay = this.renderDay.bind(this);
     }
+
+    activeDateRef = React.createRef();
+    activeDateSelectedRef = React.createRef();
+    prevMonthButtonElementRef = React.createRef();
+    nextMonthButtonElementRef = React.createRef();
 
     /* eslint-disable react/no-did-update-set-state */
     componentDidUpdate(prevProps) {
@@ -86,9 +89,7 @@ export default class Calendar extends Component {
                 event.preventDefault();
                 break;
             case KeyCode.TAB:
-                if (this.onBlur) {
-                    this.onBlur(event);
-                }
+                //TODO: fjerne focus date
                 break;
             case KeyCode.ESC:
                 this.props.escKeyHandler(event);
@@ -166,14 +167,26 @@ export default class Calendar extends Component {
         if (date.isLead) {
             return <LeadDate key={date.date} date={date} />;
         }
+
+        const forceFocus =
+            document.activeElement !== this.nextMonthButtonElementRef.current &&
+            document.activeElement !== this.prevMonthButtonElementRef.current
+                ? this.forceDateFocus
+                : false;
+
         return (
             <ActiveDate
                 date={date}
                 headers={`header__${this.datepickerId}__${index}`}
                 key={date.date}
                 onClick={this.mouseClick}
-                forceFocus={this.forceDateFocus}
+                forceFocus={forceFocus}
                 locale={this.props.language}
+                activeRef={
+                    date.isFocus
+                        ? this.activeDateSelectedRef
+                        : this.activeDateRef
+                }
             />
         );
     }
@@ -200,6 +213,35 @@ export default class Calendar extends Component {
         );
     }
 
+    focusTrap = event => {
+        const activeElement = document.activeElement;
+
+        if (event.keyCode === KeyCode.TAB) {
+            event.preventDefault();
+            if (event.shiftKey) {
+                if (activeElement === this.activeDateSelectedRef.current) {
+                    this.nextMonthButtonElementRef.current.focus();
+                }
+                if (activeElement === this.nextMonthButtonElementRef.current) {
+                    this.prevMonthButtonElementRef.current.focus();
+                }
+                if (activeElement === this.prevMonthButtonElementRef.current) {
+                    this.activeDateSelectedRef.current.focus();
+                }
+            } else {
+                if (activeElement === this.activeDateSelectedRef.current) {
+                    this.prevMonthButtonElementRef.current.focus();
+                }
+                if (activeElement === this.prevMonthButtonElementRef.current) {
+                    this.nextMonthButtonElementRef.current.focus();
+                }
+                if (activeElement === this.nextMonthButtonElementRef.current) {
+                    this.activeDateSelectedRef.current.focus();
+                }
+            }
+        }
+    };
+
     render() {
         const { calendar } = this.state;
 
@@ -214,6 +256,7 @@ export default class Calendar extends Component {
                 onFocus={this.focusHandler}
                 onBlur={this.wrapperBlurHandler}
                 role="region"
+                onKeyDown={this.focusTrap}
             >
                 <Header
                     datepickerId={this.datepickerId}
@@ -223,6 +266,8 @@ export default class Calendar extends Component {
                     previousMonthHandler={this.previousMonth}
                     previousMonthLabel={calendar.previousName()}
                     year={calendar.focusedYear()}
+                    prevMonthButtonElement={this.prevMonthButtonElementRef}
+                    nextMonthButtonElement={this.nextMonthButtonElementRef}
                 />
                 <table
                     className="ffe-calendar__grid"

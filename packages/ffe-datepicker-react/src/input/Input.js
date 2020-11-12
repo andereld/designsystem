@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { bool, func, oneOfType, string, shape } from 'prop-types';
 import classNames from 'classnames';
-import KalenderIkon from '@sb1/ffe-icons-react/lib/kalender-ikon';
 
 export default class Input extends Component {
     focus() {
@@ -16,12 +15,6 @@ export default class Input extends Component {
         );
     }
 
-    dateInputClassNames() {
-        return classNames('ffe-dateinput', {
-            'ffe-dateinput--full-width': this.props.fullWidth,
-        });
-    }
-
     render() {
         const {
             ariaInvalid,
@@ -34,25 +27,20 @@ export default class Input extends Component {
         } = this.props;
 
         return (
-            <div className={this.dateInputClassNames()}>
-                <input
-                    aria-invalid={String(
-                        this.props['aria-invalid'] || ariaInvalid,
-                    )}
-                    maxLength="10"
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                    onChange={onChange}
-                    onKeyDown={onKeyDown}
-                    ref={c => {
-                        this._input = c;
-                    }}
-                    value={value}
-                    {...inputProps}
-                    className={this.inputClassNames(inputProps.className)}
-                />
-                <KalenderIkon className="ffe-dateinput__icon" />
-            </div>
+            <input
+                aria-invalid={String(this.props['aria-invalid'] || ariaInvalid)}
+                maxLength="10"
+                onFocus={onFocus}
+                onBlur={onBlur}
+                onChange={onChange}
+                onKeyDown={onKeyDown}
+                ref={c => {
+                    this._input = c;
+                }}
+                value={value}
+                {...inputProps}
+                className={this.inputClassNames(inputProps.className)}
+            />
         );
     }
 }

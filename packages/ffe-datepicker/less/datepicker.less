@@ -210,4 +210,32 @@
     &--full-width {
         display: block;
     }
+
+    &--wrapper {
+        display: flex;
+    }
+
+    &--button {
+        background-color: transparent;
+        border: solid 2px transparent;
+        border-radius: 4px;
+        height: 45px;
+        width: 45px;
+        outline: none;
+        margin-left: 6px;
+
+        &:active,
+        &:focus,
+        &:hover {
+            border-color: @ffe-blue-azure;
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 1px @ffe-white, 0 0 0 4px @ffe-blue-focus;
+        }
+    }
+
+    &__icon {
+        vertical-align: middle;
+    }
 }

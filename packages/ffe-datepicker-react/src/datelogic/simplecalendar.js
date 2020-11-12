@@ -119,19 +119,11 @@ SimpleCalendar.prototype.dayNames = function dayNames() {
 };
 
 SimpleCalendar.prototype.previousName = function prevName() {
-    return i18n[this.locale].PREVIOUS;
-};
-
-SimpleCalendar.prototype.previousShortName = function prevName() {
-    return i18n[this.locale].PREVIOUS_SHORT;
+    return i18n[this.locale].PREVIOUS_MONTH;
 };
 
 SimpleCalendar.prototype.nextName = function nextName() {
-    return i18n[this.locale].NEXT;
-};
-
-SimpleCalendar.prototype.nextShortName = function nextName() {
-    return i18n[this.locale].NEXT_SHORT;
+    return i18n[this.locale].NEXT_MONTH;
 };
 
 SimpleCalendar.prototype.nextYear = function nextYear() {

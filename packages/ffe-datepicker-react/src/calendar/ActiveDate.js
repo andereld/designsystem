@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { bool, func, number, oneOfType, shape, string } from 'prop-types';
+import {
+    bool,
+    func,
+    number,
+    object,
+    oneOfType,
+    shape,
+    string,
+} from 'prop-types';
 import classNames from 'classnames';
 import moment from 'moment';
 import i18n from '../i18n/i18n';
@@ -14,10 +22,10 @@ export default class ActiveDate extends Component {
     }
 
     focusIfNeeded() {
-        const { date, forceFocus } = this.props;
+        const { date, forceFocus, activeRef } = this.props;
 
         if (date.isFocus && forceFocus) {
-            this._datecell.focus();
+            activeRef.current.focus();
         }
     }
 
@@ -39,7 +47,7 @@ export default class ActiveDate extends Component {
     }
 
     render() {
-        const { date, headers, onClick, locale } = this.props;
+        const { date, headers, onClick, locale, activeRef } = this.props;
 
         const timestamp = moment(date.timestamp);
         const year = timestamp.format('yyyy');
@@ -55,15 +63,14 @@ export default class ActiveDate extends Component {
                 className="ffe-calendar__day"
                 headers={headers}
                 onClick={() => onClick(date)}
-                ref={c => {
-                    this._datecell = c;
-                }}
+                ref={activeRef}
                 role="gridcell"
                 tabIndex={this.tabIndex()}
             >
                 <button
                     aria-label={`${dayOfMonth}. ${monthName} ${year}`}
                     className={this.dateClassName()}
+                    tabIndex={-1}
                 >
                     {date.date}
                 </button>
@@ -84,4 +91,5 @@ ActiveDate.propTypes = {
     onClick: func.isRequired,
     forceFocus: bool.isRequired,
     locale: string.isRequired,
+    activeRef: object,
 };
