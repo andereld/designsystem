@@ -19,6 +19,7 @@ export default class Calendar extends Component {
                 props.maxDate,
                 props.language,
             ),
+            isCalendarBlured: false,
         };
 
         this.datepickerId = `ffe-calendar-${uuid()}`;
@@ -88,11 +89,10 @@ export default class Calendar extends Component {
                 }
                 event.preventDefault();
                 break;
-            case KeyCode.TAB:
-                //TODO: fjerne focus date
-                break;
             case KeyCode.ESC:
                 this.props.escKeyHandler(event);
+                break;
+            case KeyCode.TAB:
                 break;
             case KeyCode.PGUP:
                 if (event.altKey) {
@@ -187,6 +187,7 @@ export default class Calendar extends Component {
                         ? this.activeDateSelectedRef
                         : this.activeDateRef
                 }
+                isBlured={this.state.isCalendarBlured}
             />
         );
     }
@@ -221,22 +222,28 @@ export default class Calendar extends Component {
             if (event.shiftKey) {
                 if (activeElement === this.activeDateSelectedRef.current) {
                     this.nextMonthButtonElementRef.current.focus();
+                    this.setState({ isCalendarBlured: true });
                 }
                 if (activeElement === this.nextMonthButtonElementRef.current) {
                     this.prevMonthButtonElementRef.current.focus();
                 }
                 if (activeElement === this.prevMonthButtonElementRef.current) {
                     this.activeDateSelectedRef.current.focus();
+                    this.setState({ isCalendarBlured: false });
+                    this.forceUpdate();
                 }
             } else {
                 if (activeElement === this.activeDateSelectedRef.current) {
                     this.prevMonthButtonElementRef.current.focus();
+                    this.setState({ isCalendarBlured: true });
                 }
                 if (activeElement === this.prevMonthButtonElementRef.current) {
                     this.nextMonthButtonElementRef.current.focus();
                 }
                 if (activeElement === this.nextMonthButtonElementRef.current) {
                     this.activeDateSelectedRef.current.focus();
+                    this.setState({ isCalendarBlured: false });
+                    this.forceUpdate();
                 }
             }
         }

@@ -23,19 +23,19 @@ export default class ActiveDate extends Component {
 
     focusIfNeeded() {
         const { date, forceFocus, activeRef } = this.props;
-
         if (date.isFocus && forceFocus) {
             activeRef.current.focus();
         }
     }
 
     dateClassName() {
-        const { isEnabled, isFocus, isSelected, isToday } = this.props.date;
+        const { date, isBlured } = this.props;
+        const { isEnabled, isFocus, isSelected, isToday } = date;
 
         return classNames({
             'ffe-calendar__date': true,
             'ffe-calendar__date--today': isToday,
-            'ffe-calendar__date--focus': isFocus,
+            'ffe-calendar__date--focus': isFocus && !isBlured,
             'ffe-calendar__date--disabled': !isEnabled,
             'ffe-calendar__date--selected': isSelected,
             'ffe-calendar__date--disabled-focus': !isEnabled && isFocus,
@@ -65,6 +65,7 @@ export default class ActiveDate extends Component {
                 onClick={() => onClick(date)}
                 ref={activeRef}
                 role="gridcell"
+                date-number={date.date}
                 tabIndex={this.tabIndex()}
             >
                 <button
@@ -92,4 +93,5 @@ ActiveDate.propTypes = {
     forceFocus: bool.isRequired,
     locale: string.isRequired,
     activeRef: object,
+    isBlured: bool.isRequired,
 };
